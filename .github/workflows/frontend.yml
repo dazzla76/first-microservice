@@ -34,4 +34,4 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.metadata.outputs.tags }}
