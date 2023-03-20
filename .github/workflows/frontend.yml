@@ -17,10 +17,21 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
+      - name: Container Repo metadata
+        id: metadata
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/dazzla76/first-microservice/frontend
+          tags: type=sha
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v4
         with:
-          github-token: ${{ github.token }}
-          repository: dazzla76/first-microservice/frontend
-          tag_with_ref: true
-          dockerfile: ./frontend/Dockerfile
+          context: ./frontend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
